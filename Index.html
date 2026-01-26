@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Learning App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .language-selector {
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .language-selector label {
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .language-selector select {
+            padding: 10px 15px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            background: white;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #6c757d;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: #e9ecef;
+        }
+
+        .tab.active {
+            color: #667eea;
+            background: white;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .content {
+            padding: 30px;
+            min-height: 400px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .flashcard {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 60px 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .flashcard:hover {
+            transform: translateY(-5px);
+        }
+
+        .flashcard.flipped {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .flashcard-word {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .flashcard-translation {
+            font-size: 1.5em;
+            opacity: 0.9;
+        }
+
+        .flashcard-hint {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.9em;
+            opacity: 0.7;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 20px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        .quiz-question {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-question h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .quiz-option {
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .quiz-option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .quiz-option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .quiz-option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .vocabulary-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .vocab-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vocab-word {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .vocab-translation {
+            font-size: 1.1em;
+            color: #6c757d;
+        }
+
+        .vocab-mastery {
+            display: flex;
+            gap: 5px;
+        }
+
+        .mastery-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e9ecef;
+        }
+
+        .mastery-dot.filled {
+            background: #667eea;
+        }
+
+        .lesson-content {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            line-height: 1.8;
+        }
+
+        .lesson-content h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .lesson-content p {
+            margin-bottom: 15px;
+        }
+
+        .example {
+            background: white;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            margin: 15px 0;
+        }
+
+        .speak-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .speak-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .speak-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌍 Language Learning App</h1>
+            <p>Master a new language with interactive lessons and practice</p>
+        </div>
+
+        <div class="language-selector">
+            <label for="language">Choose your language:</label>
+            <select id="language">
+                <option value="portuguese" selected>Portuguese (Português)</option>
+                <option value="spanish">Spanish (Español)</option>
+                <option value="french">French (Français)</option>
+                <option value="german">German (Deutsch)</option>
+                <option value="italian">Italian (Italiano)</option>
+                <option value="japanese">Japanese (日本語)</option>
+            </select>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showSection('flashcards')">Flashcards</button>
+            <button class="tab" onclick="showSection('quiz')">Quiz</button>
+            <button class="tab" onclick="showSection('vocabulary')">Vocabulary</button>
+            <button class="tab" onclick="showSection('lessons')">Lessons</button>
+            <button class="tab" onclick="showSection('progress')">Progress</button>
+        </div>
+
+        <div class="content">
+            <div id="flashcards" class="section active">
+                <div class="flashcard" id="flashcard" onclick="flipCard()">
+                    <div class="flashcard-word" id="card-front">Hello</div>
+                    <div class="flashcard-translation" id="card-back" style="display: none;">Hola</div>
+                    <button class="speak-btn" onclick="event.stopPropagation(); speakWord();" title="Hear pronunciation">🔊 Say it</button>
+                    <div class="flashcard-hint">Click to flip</div>
+                </div>
+                <div class="controls">
+                    <button class="btn btn-warning" onclick="markDifficult()">😰 Difficult</button>
+                    <button class="btn btn-primary" onclick="nextCard()">⏭️ Next Card</button>
+                    <button class="btn btn-success" onclick="markKnown()">✅ I Know This</button>
+                </div>
+                <div class="progress-bar" style="margin-top: 30px;">
+                    <div class="progress-fill" id="flashcard-progress" style="width: 0%;">0/20</div>
+                </div>
+            </div>
+
+            <div id="quiz" class="section">
+                <div class="quiz-question">
+                    <h3 id="quiz-question-text">What is the translation of "Hello"?</h3>
+                    <div class="quiz-options" id="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(this, false)">Adiós</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, true)">Hola</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, false)">Gracias</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, false)">Por favor</div>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button class="btn btn-primary" onclick="nextQuiz()">Next Question</button>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="quiz-progress" style="width: 0%;">0/10</div>
+                </div>
+            </div>
+
+            <div id="vocabulary" class="section">
+                <h2 style="margin-bottom: 20px;">Your Vocabulary</h2>
+                <div class="vocabulary-list" id="vocab-list">
+                    <!-- Vocabulary items will be added here -->
+                </div>
+            </div>
+
+            <div id="lessons" class="section">
+                <h2 style="margin-bottom: 20px;">Grammar Lessons</h2>
+                <div class="lesson-content" id="lesson-content">
+                    <h3>Lesson 1: Basic Portuguese Greetings</h3>
+                    <p>Portuguese greetings vary based on the time of day and level of formality. Brazilian Portuguese and European Portuguese have some differences in pronunciation and usage.</p>
+                    
+                    <div class="example">
+                        <strong>Olá</strong> - Hello (universal)<br>
+                        <strong>Bom dia</strong> - Good morning (until noon)<br>
+                        <strong>Boa tarde</strong> - Good afternoon (noon to evening)<br>
+                        <strong>Boa noite</strong> - Good evening/night (after sunset)
+                    </div>
+
+                    <p><strong>Gender Agreement:</strong> Portuguese has masculine and feminine forms. "Thank you" changes based on the speaker's gender:</p>
+
+                    <div class="example">
+                        <strong>Obrigado</strong> - Thank you (said by males)<br>
+                        <strong>Obrigada</strong> - Thank you (said by females)
+                    </div>
+
+                    <h3 style="margin-top: 25px;">Lesson 2: Pronouns and Verb "Estar"</h3>
+                    <p>The verb "estar" (to be) is used for temporary states and locations. Here are the present tense conjugations:</p>
+
+                    <div class="example">
+                        <strong>Eu estou</strong> - I am<br>
+                        <strong>Você está</strong> - You are<br>
+                        <strong>Ele/Ela está</strong> - He/She is<br>
+                        <strong>Nós estamos</strong> - We are<br>
+                        <strong>Eles/Elas estão</strong> - They are
+                    </div>
+
+                    <p><strong>Example:</strong> "Como você está?" (How are you?) → "Estou bem, obrigado!" (I'm well, thank you!)</p>
+
+                    <h3 style="margin-top: 25px;">Pronunciation Tips</h3>
+                    <p>Portuguese has unique sounds that don't exist in English:</p>
+                    <div class="example">
+                        <strong>ã, õ</strong> - Nasal vowels (like "sang" in French)<br>
+                        <strong>lh</strong> - Sounds like "lli" in "million"<br>
+                        <strong>nh</strong> - Sounds like "ny" in "canyon"<br>
+                        <strong>r</strong> at the start or "rr" - Guttural sound (like clearing your throat)<br>
+                        <strong>ç</strong> - Sounds like "s" in "sun"
+                    </div>
+                </div>
+            </div>
+
+            <div id="progress" class="section">
+                <h2 style="margin-bottom: 20px;">Your Progress</h2>
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="words-learned">0</div>
+                        <div class="stat-label">Words Learned</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="study-streak">0</div>
+                        <div class="stat-label">Day Streak</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="quiz-accuracy">0%</div>
+                        <div class="stat-label">Quiz Accuracy</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-time">0</div>
+                        <div class="stat-label">Minutes Studied</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Language vocabularies
+        const vocabularies = {
+            spanish: [
+                {word: 'Hello', translation: 'Hola', mastery: 0},
+                {word: 'Goodbye', translation: 'Adiós', mastery: 0},
+                {word: 'Thank you', translation: 'Gracias', mastery: 0},
+                {word: 'Please', translation: 'Por favor', mastery: 0},
+                {word: 'Yes', translation: 'Sí', mastery: 0},
+                {word: 'No', translation: 'No', mastery: 0},
+                {word: 'Water', translation: 'Agua', mastery: 0},
+                {word: 'Food', translation: 'Comida', mastery: 0},
+                {word: 'Friend', translation: 'Amigo', mastery: 0},
+                {word: 'Family', translation: 'Familia', mastery: 0},
+                {word: 'House', translation: 'Casa', mastery: 0},
+                {word: 'Car', translation: 'Coche', mastery: 0},
+                {word: 'Book', translation: 'Libro', mastery: 0},
+                {word: 'Good', translation: 'Bueno', mastery: 0},
+                {word: 'Bad', translation: 'Malo', mastery: 0},
+                {word: 'Beautiful', translation: 'Hermoso', mastery: 0},
+                {word: 'Big', translation: 'Grande', mastery: 0},
+                {word: 'Small', translation: 'Pequeño', mastery: 0},
+                {word: 'Love', translation: 'Amor', mastery: 0},
+                {word: 'Time', translation: 'Tiempo', mastery: 0}
+            ],
+            french: [
+                {word: 'Hello', translation: 'Bonjour', mastery: 0},
+                {word: 'Goodbye', translation: 'Au revoir', mastery: 0},
+                {word: 'Thank you', translation: 'Merci', mastery: 0},
+                {word: 'Please', translation: 'S\'il vous plaît', mastery: 0},
+                {word: 'Yes', translation: 'Oui', mastery: 0},
+                {word: 'No', translation: 'Non', mastery: 0},
+                {word: 'Water', translation: 'Eau', mastery: 0},
+                {word: 'Food', translation: 'Nourriture', mastery: 0},
+                {word: 'Friend', translation: 'Ami', mastery: 0},
+                {word: 'Family', translation: 'Famille', mastery: 0},
+                {word: 'House', translation: 'Maison', mastery: 0},
+                {word: 'Car', translation: 'Voiture', mastery: 0},
+                {word: 'Book', translation: 'Livre', mastery: 0},
+                {word: 'Good', translation: 'Bon', mastery: 0},
+                {word: 'Bad', translation: 'Mauvais', mastery: 0},
+                {word: 'Beautiful', translation: 'Beau', mastery: 0},
+                {word: 'Big', translation: 'Grand', mastery: 0},
+                {word: 'Small', translation: 'Petit', mastery: 0},
+                {word: 'Love', translation: 'Amour', mastery: 0},
+                {word: 'Time', translation: 'Temps', mastery: 0}
+            ],
+            german: [
+                {word: 'Hello', translation: 'Hallo', mastery: 0},
+                {word: 'Goodbye', translation: 'Auf Wiedersehen', mastery: 0},
+                {word: 'Thank you', translation: 'Danke', mastery: 0},
+                {word: 'Please', translation: 'Bitte', mastery: 0},
+                {word: 'Yes', translation: 'Ja', mastery: 0},
+                {word: 'No', translation: 'Nein', mastery: 0},
+                {word: 'Water', translation: 'Wasser', mastery: 0},
+                {word: 'Food', translation: 'Essen', mastery: 0},
+                {word: 'Friend', translation: 'Freund', mastery: 0},
+                {word: 'Family', translation: 'Familie', mastery: 0},
+                {word: 'House', translation: 'Haus', mastery: 0},
+                {word: 'Car', translation: 'Auto', mastery: 0},
+                {word: 'Book', translation: 'Buch', mastery: 0},
+                {word: 'Good', translation: 'Gut', mastery: 0},
+                {word: 'Bad', translation: 'Schlecht', mastery: 0},
+                {word: 'Beautiful', translation: 'Schön', mastery: 0},
+                {word: 'Big', translation: 'Groß', mastery: 0},
+                {word: 'Small', translation: 'Klein', mastery: 0},
+                {word: 'Love', translation: 'Liebe', mastery: 0},
+                {word: 'Time', translation: 'Zeit', mastery: 0}
+            ],
+            italian: [
+                {word: 'Hello', translation: 'Ciao', mastery: 0},
+                {word: 'Goodbye', translation: 'Arrivederci', mastery: 0},
+                {word: 'Thank you', translation: 'Grazie', mastery: 0},
+                {word: 'Please', translation: 'Per favore', mastery: 0},
+                {word: 'Yes', translation: 'Sì', mastery: 0},
+                {word: 'No', translation: 'No', mastery: 0},
+                {word: 'Water', translation: 'Acqua', mastery: 0},
+                {word: 'Food', translation: 'Cibo', mastery: 0},
+                {word: 'Friend', translation: 'Amico', mastery: 0},
+                {word: 'Family', translation: 'Famiglia', mastery: 0},
+                {word: 'House', translation: 'Casa', mastery: 0},
+                {word: 'Car', translation: 'Macchina', mastery: 0},
+                {word: 'Book', translation: 'Libro', mastery: 0},
+                {word: 'Good', translation: 'Buono', mastery: 0},
+                {word: 'Bad', translation: 'Cattivo', mastery: 0},
+                {word: 'Beautiful', translation: 'Bello', mastery: 0},
+                {word: 'Big', translation: 'Grande', mastery: 0},
+                {word: 'Small', translation: 'Piccolo', mastery: 0},
+                {word: 'Love', translation: 'Amore', mastery: 0},
+                {word: 'Time', translation: 'Tempo', mastery: 0}
+            ],
+            portuguese: [
+                {word: 'Hello', translation: 'Olá', mastery: 0},
+                {word: 'Good morning', translation: 'Bom dia', mastery: 0},
+                {word: 'Good afternoon', translation: 'Boa tarde', mastery: 0},
+                {word: 'Good evening', translation: 'Boa noite', mastery: 0},
+                {word: 'Goodbye', translation: 'Tchau', mastery: 0},
+                {word: 'See you later', translation: 'Até logo', mastery: 0},
+                {word: 'Thank you', translation: 'Obrigado/Obrigada', mastery: 0},
+                {word: 'Please', translation: 'Por favor', mastery: 0},
+                {word: 'Excuse me', translation: 'Com licença', mastery: 0},
+                {word: 'Sorry', translation: 'Desculpe', mastery: 0},
+                {word: 'Yes', translation: 'Sim', mastery: 0},
+                {word: 'No', translation: 'Não', mastery: 0},
+                {word: 'Maybe', translation: 'Talvez', mastery: 0},
+                {word: 'How are you?', translation: 'Como você está?', mastery: 0},
+                {word: 'I am well', translation: 'Estou bem', mastery: 0},
+                {word: 'What is your name?', translation: 'Qual é o seu nome?', mastery: 0},
+                {word: 'My name is...', translation: 'Meu nome é...', mastery: 0},
+                {word: 'Nice to meet you', translation: 'Prazer em conhecê-lo', mastery: 0},
+                {word: 'Water', translation: 'Água', mastery: 0},
+                {word: 'Food', translation: 'Comida', mastery: 0},
+                {word: 'Coffee', translation: 'Café', mastery: 0},
+                {word: 'Bread', translation: 'Pão', mastery: 0},
+                {word: 'Friend', translation: 'Amigo/Amiga', mastery: 0},
+                {word: 'Family', translation: 'Família', mastery: 0},
+                {word: 'House', translation: 'Casa', mastery: 0},
+                {word: 'Car', translation: 'Carro', mastery: 0},
+                {word: 'Book', translation: 'Livro', mastery: 0},
+                {word: 'Phone', translation: 'Telefone', mastery: 0},
+                {word: 'Money', translation: 'Dinheiro', mastery: 0},
+                {word: 'Work', translation: 'Trabalho', mastery: 0},
+                {word: 'Good', translation: 'Bom/Boa', mastery: 0},
+                {word: 'Bad', translation: 'Mau/Má', mastery: 0},
+                {word: 'Beautiful', translation: 'Bonito/Bonita', mastery: 0},
+                {word: 'Big', translation: 'Grande', mastery: 0},
+                {word: 'Small', translation: 'Pequeno/Pequena', mastery: 0},
+                {word: 'Hot', translation: 'Quente', mastery: 0},
+                {word: 'Cold', translation: 'Frio/Fria', mastery: 0},
+                {word: 'Love', translation: 'Amor', mastery: 0},
+                {word: 'Time', translation: 'Tempo', mastery: 0},
+                {word: 'Today', translation: 'Hoje', mastery: 0},
+                {word: 'Tomorrow', translation: 'Amanhã', mastery: 0},
+                {word: 'Yesterday', translation: 'Ontem', mastery: 0},
+                {word: 'I want', translation: 'Eu quero', mastery: 0},
+                {word: 'I need', translation: 'Eu preciso', mastery: 0},
+                {word: 'I like', translation: 'Eu gosto', mastery: 0},
+                {word: 'I understand', translation: 'Eu entendo', mastery: 0},
+                {word: 'I don\'t understand', translation: 'Eu não entendo', mastery: 0},
+                {word: 'Do you speak English?', translation: 'Você fala inglês?', mastery: 0},
+                {word: 'How much?', translation: 'Quanto custa?', mastery: 0},
+                {word: 'Where is...?', translation: 'Onde fica...?', mastery: 0}
+            ],
+            japanese: [
+                {word: 'Hello', translation: 'こんにちは (Konnichiwa)', mastery: 0},
+                {word: 'Goodbye', translation: 'さようなら (Sayōnara)', mastery: 0},
+                {word: 'Thank you', translation: 'ありがとう (Arigatō)', mastery: 0},
+                {word: 'Please', translation: 'お願いします (Onegaishimasu)', mastery: 0},
+                {word: 'Yes', translation: 'はい (Hai)', mastery: 0},
+                {word: 'No', translation: 'いいえ (Iie)', mastery: 0},
+                {word: 'Water', translation: '水 (Mizu)', mastery: 0},
+                {word: 'Food', translation: '食べ物 (Tabemono)', mastery: 0},
+                {word: 'Friend', translation: '友達 (Tomodachi)', mastery: 0},
+                {word: 'Family', translation: '家族 (Kazoku)', mastery: 0},
+                {word: 'House', translation: '家 (Ie)', mastery: 0},
+                {word: 'Car', translation: '車 (Kuruma)', mastery: 0},
+                {word: 'Book', translation: '本 (Hon)', mastery: 0},
+                {word: 'Good', translation: '良い (Yoi)', mastery: 0},
+                {word: 'Bad', translation: '悪い (Warui)', mastery: 0},
+                {word: 'Beautiful', translation: '美しい (Utsukushii)', mastery: 0},
+                {word: 'Big', translation: '大きい (Ōkii)', mastery: 0},
+                {word: 'Small', translation: '小さい (Chīsai)', mastery: 0},
+                {word: 'Love', translation: '愛 (Ai)', mastery: 0},
+                {word: 'Time', translation: '時間 (Jikan)', mastery: 0}
+            ]
+        };
+
+        let currentLanguage = 'portuguese';
+        let currentVocab = vocabularies[currentLanguage];
+        let currentCardIndex = 0;
+        let isFlipped = false;
+        let wordsLearned = 0;
+        let quizScore = 0;
+        let quizTotal = 0;
+        let studyTime = 0;
+
+        // Initialize
+        document.getElementById('language').addEventListener('change', function(e) {
+            currentLanguage = e.target.value;
+            currentVocab = vocabularies[currentLanguage];
+            currentCardIndex = 0;
+            updateCard();
+            updateVocabulary();
+        });
+
+        // Flashcard functions
+        function flipCard() {
+            const flashcard = document.getElementById('flashcard');
+            const front = document.getElementById('card-front');
+            const back = document.getElementById('card-back');
+            
+            isFlipped = !isFlipped;
+            
+            if (isFlipped) {
+                front.style.display = 'none';
+                back.style.display = 'block';
+                flashcard.classList.add('flipped');
+            } else {
+                front.style.display = 'block';
+                back.style.display = 'none';
+                flashcard.classList.remove('flipped');
+            }
+        }
+
+        function updateCard() {
+            if (currentCardIndex >= currentVocab.length) {
+                currentCardIndex = 0;
+            }
+            
+            const card = currentVocab[currentCardIndex];
+            document.getElementById('card-front').textContent = card.word;
+            document.getElementById('card-back').textContent = card.translation;
+            
+            // Reset flip state
+            isFlipped = false;
+            document.getElementById('card-front').style.display = 'block';
+            document.getElementById('card-back').style.display = 'none';
+            document.getElementById('flashcard').classList.remove('flipped');
+            
+            // Update progress
+            const progress = ((currentCardIndex + 1) / currentVocab.length * 100).toFixed(0);
+            const progressBar = document.getElementById('flashcard-progress');
+            progressBar.style.width = progress + '%';
+            progressBar.textContent = `${currentCardIndex + 1}/${currentVocab.length}`;
+        }
+
+        function nextCard() {
+            currentCardIndex++;
+            if (currentCardIndex >= currentVocab.length) {
+                currentCardIndex = 0;
+            }
+            updateCard();
+        }
+
+        function markKnown() {
+            currentVocab[currentCardIndex].mastery = Math.min(5, currentVocab[currentCardIndex].mastery + 1);
+            if (currentVocab[currentCardIndex].mastery === 5) {
+                wordsLearned++;
+                updateStats();
+            }
+            nextCard();
+            updateVocabulary();
+        }
+
+        function markDifficult() {
+            currentVocab[currentCardIndex].mastery = Math.max(0, currentVocab[currentCardIndex].mastery - 1);
+            nextCard();
+            updateVocabulary();
+        }
+
+        // Quiz functions
+        function generateQuiz() {
+            const randomIndex = Math.floor(Math.random() * currentVocab.length);
+            const correctAnswer = currentVocab[randomIndex];
+            
+            // Get wrong answers
+            const wrongAnswers = [];
+            while (wrongAnswers.length < 3) {
+                const wrongIndex = Math.floor(Math.random() * currentVocab.length);
+                if (wrongIndex !== randomIndex && !wrongAnswers.includes(currentVocab[wrongIndex])) {
+                    wrongAnswers.push(currentVocab[wrongIndex]);
+                }
+            }
+            
+            // Mix answers
+            const allAnswers = [correctAnswer, ...wrongAnswers];
+            allAnswers.sort(() => Math.random() - 0.5);
+            
+            // Update UI
+            document.getElementById('quiz-question-text').textContent = `What is the translation of "${correctAnswer.word}"?`;
+            
+            const optionsDiv = document.getElementById('quiz-options');
+            optionsDiv.innerHTML = '';
+            
+            allAnswers.forEach(answer => {
+                const option = document.createElement('div');
+                option.className = 'quiz-option';
+                option.textContent = answer.translation;
+                option.onclick = () => checkAnswer(option, answer === correctAnswer);
+                optionsDiv.appendChild(option);
+            });
+        }
+
+        function checkAnswer(element, isCorrect) {
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+            
+            if (isCorrect) {
+                element.classList.add('correct');
+                quizScore++;
+            } else {
+                element.classList.add('incorrect');
+            }
+            
+            quizTotal++;
+            updateStats();
+        }
+
+        function nextQuiz() {
+            generateQuiz();
+            const progress = Math.min(100, (quizTotal / 10 * 100)).toFixed(0);
+            const progressBar = document.getElementById('quiz-progress');
+            progressBar.style.width = progress + '%';
+            progressBar.textContent = `${quizTotal}/10`;
+        }
+
+        // Vocabulary functions
+        function updateVocabulary() {
+            const vocabList = document.getElementById('vocab-list');
+            vocabList.innerHTML = '';
+            
+            currentVocab.forEach(item => {
+                const vocabItem = document.createElement('div');
+                vocabItem.className = 'vocab-item';
+                
+                vocabItem.innerHTML = `
+                    <div>
+                        <div class="vocab-word">${item.word}</div>
+                        <div class="vocab-translation">${item.translation}</div>
+                    </div>
+                    <div class="vocab-mastery">
+                        ${[1,2,3,4,5].map(i => `<div class="mastery-dot ${i <= item.mastery ? 'filled' : ''}"></div>`).join('')}
+                    </div>
+                `;
+                
+                vocabList.appendChild(vocabItem);
+            });
+        }
+
+        // Tab navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Set active tab
+            event.target.classList.add('active');
+        }
+
+        // Stats functions
+        function updateStats() {
+            document.getElementById('words-learned').textContent = wordsLearned;
+            document.getElementById('study-streak').textContent = '1'; // Placeholder
+            
+            const accuracy = quizTotal > 0 ? ((quizScore / quizTotal) * 100).toFixed(0) : 0;
+            document.getElementById('quiz-accuracy').textContent = accuracy + '%';
+            
+            studyTime++;
+            document.getElementById('total-time').textContent = studyTime;
+        }
+
+        // Study timer
+        setInterval(() => {
+            studyTime++;
+            document.getElementById('total-time').textContent = studyTime;
+        }, 60000); // Update every minute
+
+        // Initialize app
+        updateCard();
+        updateVocabulary();
+        generateQuiz();
+
+        // Text-to-speech functionality
+        function speakWord() {
+            if ('speechSynthesis' in window) {
+                // Cancel any ongoing speech
+                window.speechSynthesis.cancel();
+                
+                // Get the current word to speak (Portuguese translation)
+                const wordToSpeak = currentVocab[currentCardIndex].translation;
+                
+                // Create utterance
+                const utterance = new SpeechSynthesisUtterance(wordToSpeak);
+                
+                // Set language to Portuguese
+                utterance.lang = 'pt-BR'; // Brazilian Portuguese (you can use 'pt-PT' for European Portuguese)
+                utterance.rate = 0.8; // Slightly slower for learning
+                utterance.pitch = 1;
+                utterance.volume = 1;
+                
+                // Try to find a Portuguese voice
+                const voices = window.speechSynthesis.getVoices();
+                const portugueseVoice = voices.find(voice => 
+                    voice.lang.startsWith('pt') || voice.lang.includes('PT')
+                );
+                
+                if (portugueseVoice) {
+                    utterance.voice = portugueseVoice;
+                }
+                
+                // Speak
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Sorry, your browser does not support text-to-speech.');
+            }
+        }
+
+        // Load voices (some browsers need this)
+        if ('speechSynthesis' in window) {
+            speechSynthesis.onvoiceschanged = () => {
+                speechSynthesis.getVoices();
+            };
+        }
+    </script>
+</body>
+</html>
+            
