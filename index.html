@@ -285,6 +285,9 @@
             cursor: pointer;
             transition: all 0.3s;
             background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .quiz-option:hover {
@@ -308,6 +311,24 @@
             font-weight: 600;
         }
 
+        .mini-speak-btn {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            color: #667eea;
+            padding: 5px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-left: 10px;
+        }
+
+        .mini-speak-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: scale(1.05);
+        }
+
         .vocabulary-list {
             display: grid;
             gap: 15px;
@@ -320,6 +341,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 15px;
         }
 
         .vocab-word {
@@ -331,6 +353,12 @@
         .vocab-translation {
             font-size: 1.1em;
             color: #6c757d;
+        }
+
+        .vocab-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         .vocab-mastery {
@@ -501,31 +529,33 @@
                     <p>Portuguese greetings vary based on the time of day and level of formality. Brazilian Portuguese and European Portuguese have some differences in pronunciation and usage.</p>
                     
                     <div class="example">
-                        <strong>Olá</strong> - Hello (universal)<br>
-                        <strong>Bom dia</strong> - Good morning (until noon)<br>
-                        <strong>Boa tarde</strong> - Good afternoon (noon to evening)<br>
-                        <strong>Boa noite</strong> - Good evening/night (after sunset)
+                        <strong>Olá</strong> - Hello (universal) <button class="mini-speak-btn" onclick="speakText('Olá')">🔊</button><br>
+                        <strong>Bom dia</strong> - Good morning (until noon) <button class="mini-speak-btn" onclick="speakText('Bom dia')">🔊</button><br>
+                        <strong>Boa tarde</strong> - Good afternoon (noon to evening) <button class="mini-speak-btn" onclick="speakText('Boa tarde')">🔊</button><br>
+                        <strong>Boa noite</strong> - Good evening/night (after sunset) <button class="mini-speak-btn" onclick="speakText('Boa noite')">🔊</button>
                     </div>
 
                     <p><strong>Gender Agreement:</strong> Portuguese has masculine and feminine forms. "Thank you" changes based on the speaker's gender:</p>
 
                     <div class="example">
-                        <strong>Obrigado</strong> - Thank you (said by males)<br>
-                        <strong>Obrigada</strong> - Thank you (said by females)
+                        <strong>Obrigado</strong> - Thank you (said by males) <button class="mini-speak-btn" onclick="speakText('Obrigado')">🔊</button><br>
+                        <strong>Obrigada</strong> - Thank you (said by females) <button class="mini-speak-btn" onclick="speakText('Obrigada')">🔊</button>
                     </div>
 
                     <h3 style="margin-top: 25px;">Lesson 2: Pronouns and Verb "Estar"</h3>
                     <p>The verb "estar" (to be) is used for temporary states and locations. Here are the present tense conjugations:</p>
 
                     <div class="example">
-                        <strong>Eu estou</strong> - I am<br>
-                        <strong>Você está</strong> - You are<br>
-                        <strong>Ele/Ela está</strong> - He/She is<br>
-                        <strong>Nós estamos</strong> - We are<br>
-                        <strong>Eles/Elas estão</strong> - They are
+                        <strong>Eu estou</strong> - I am <button class="mini-speak-btn" onclick="speakText('Eu estou')">🔊</button><br>
+                        <strong>Você está</strong> - You are <button class="mini-speak-btn" onclick="speakText('Você está')">🔊</button><br>
+                        <strong>Ele/Ela está</strong> - He/She is <button class="mini-speak-btn" onclick="speakText('Ele está')">🔊</button><br>
+                        <strong>Nós estamos</strong> - We are <button class="mini-speak-btn" onclick="speakText('Nós estamos')">🔊</button><br>
+                        <strong>Eles/Elas estão</strong> - They are <button class="mini-speak-btn" onclick="speakText('Eles estão')">🔊</button>
                     </div>
 
-                    <p><strong>Example:</strong> "Como você está?" (How are you?) → "Estou bem, obrigado!" (I'm well, thank you!)</p>
+                    <p><strong>Example:</strong> 
+                    <button class="mini-speak-btn" onclick="speakText('Como você está')">🔊</button> "Como você está?" (How are you?) → 
+                    <button class="mini-speak-btn" onclick="speakText('Estou bem, obrigado')">🔊</button> "Estou bem, obrigado!" (I'm well, thank you!)</p>
 
                     <h3 style="margin-top: 25px;">Pronunciation Tips</h3>
                     <p>Portuguese has unique sounds that don't exist in English:</p>
@@ -655,56 +685,255 @@
                 {word: 'Time', translation: 'Tempo', mastery: 0}
             ],
             portuguese: [
-                {word: 'Hello', translation: 'Olá', mastery: 0},
-                {word: 'Good morning', translation: 'Bom dia', mastery: 0},
-                {word: 'Good afternoon', translation: 'Boa tarde', mastery: 0},
-                {word: 'Good evening', translation: 'Boa noite', mastery: 0},
-                {word: 'Goodbye', translation: 'Tchau', mastery: 0},
-                {word: 'See you later', translation: 'Até logo', mastery: 0},
-                {word: 'Thank you', translation: 'Obrigado/Obrigada', mastery: 0},
-                {word: 'Please', translation: 'Por favor', mastery: 0},
-                {word: 'Excuse me', translation: 'Com licença', mastery: 0},
-                {word: 'Sorry', translation: 'Desculpe', mastery: 0},
-                {word: 'Yes', translation: 'Sim', mastery: 0},
-                {word: 'No', translation: 'Não', mastery: 0},
-                {word: 'Maybe', translation: 'Talvez', mastery: 0},
-                {word: 'How are you?', translation: 'Como você está?', mastery: 0},
-                {word: 'I am well', translation: 'Estou bem', mastery: 0},
-                {word: 'What is your name?', translation: 'Qual é o seu nome?', mastery: 0},
-                {word: 'My name is...', translation: 'Meu nome é...', mastery: 0},
-                {word: 'Nice to meet you', translation: 'Prazer em conhecê-lo', mastery: 0},
-                {word: 'Water', translation: 'Água', mastery: 0},
-                {word: 'Food', translation: 'Comida', mastery: 0},
-                {word: 'Coffee', translation: 'Café', mastery: 0},
-                {word: 'Bread', translation: 'Pão', mastery: 0},
-                {word: 'Friend', translation: 'Amigo/Amiga', mastery: 0},
-                {word: 'Family', translation: 'Família', mastery: 0},
-                {word: 'House', translation: 'Casa', mastery: 0},
-                {word: 'Car', translation: 'Carro', mastery: 0},
-                {word: 'Book', translation: 'Livro', mastery: 0},
-                {word: 'Phone', translation: 'Telefone', mastery: 0},
-                {word: 'Money', translation: 'Dinheiro', mastery: 0},
-                {word: 'Work', translation: 'Trabalho', mastery: 0},
-                {word: 'Good', translation: 'Bom/Boa', mastery: 0},
-                {word: 'Bad', translation: 'Mau/Má', mastery: 0},
-                {word: 'Beautiful', translation: 'Bonito/Bonita', mastery: 0},
-                {word: 'Big', translation: 'Grande', mastery: 0},
-                {word: 'Small', translation: 'Pequeno/Pequena', mastery: 0},
-                {word: 'Hot', translation: 'Quente', mastery: 0},
-                {word: 'Cold', translation: 'Frio/Fria', mastery: 0},
-                {word: 'Love', translation: 'Amor', mastery: 0},
-                {word: 'Time', translation: 'Tempo', mastery: 0},
-                {word: 'Today', translation: 'Hoje', mastery: 0},
-                {word: 'Tomorrow', translation: 'Amanhã', mastery: 0},
-                {word: 'Yesterday', translation: 'Ontem', mastery: 0},
-                {word: 'I want', translation: 'Eu quero', mastery: 0},
-                {word: 'I need', translation: 'Eu preciso', mastery: 0},
-                {word: 'I like', translation: 'Eu gosto', mastery: 0},
-                {word: 'I understand', translation: 'Eu entendo', mastery: 0},
-                {word: 'I don\'t understand', translation: 'Eu não entendo', mastery: 0},
-                {word: 'Do you speak English?', translation: 'Você fala inglês?', mastery: 0},
-                {word: 'How much?', translation: 'Quanto custa?', mastery: 0},
-                {word: 'Where is...?', translation: 'Onde fica...?', mastery: 0}
+                // BEGINNER LEVEL - Basic Greetings & Politeness (25 words)
+                {word: 'Hello', translation: 'Olá', mastery: 0, level: 'beginner'},
+                {word: 'Good morning', translation: 'Bom dia', mastery: 0, level: 'beginner'},
+                {word: 'Good afternoon', translation: 'Boa tarde', mastery: 0, level: 'beginner'},
+                {word: 'Good evening/night', translation: 'Boa noite', mastery: 0, level: 'beginner'},
+                {word: 'Goodbye', translation: 'Tchau', mastery: 0, level: 'beginner'},
+                {word: 'See you later', translation: 'Até logo', mastery: 0, level: 'beginner'},
+                {word: 'See you tomorrow', translation: 'Até amanhã', mastery: 0, level: 'beginner'},
+                {word: 'Thank you', translation: 'Obrigado/Obrigada', mastery: 0, level: 'beginner'},
+                {word: 'Thank you very much', translation: 'Muito obrigado', mastery: 0, level: 'beginner'},
+                {word: 'Please', translation: 'Por favor', mastery: 0, level: 'beginner'},
+                {word: 'Excuse me', translation: 'Com licença', mastery: 0, level: 'beginner'},
+                {word: 'Sorry', translation: 'Desculpe', mastery: 0, level: 'beginner'},
+                {word: 'Yes', translation: 'Sim', mastery: 0, level: 'beginner'},
+                {word: 'No', translation: 'Não', mastery: 0, level: 'beginner'},
+                {word: 'Maybe', translation: 'Talvez', mastery: 0, level: 'beginner'},
+                {word: 'Of course', translation: 'Claro', mastery: 0, level: 'beginner'},
+                {word: 'You\'re welcome', translation: 'De nada', mastery: 0, level: 'beginner'},
+                {word: 'No problem', translation: 'Sem problema', mastery: 0, level: 'beginner'},
+                {word: 'OK/Alright', translation: 'Tudo bem', mastery: 0, level: 'beginner'},
+                {word: 'Help', translation: 'Ajuda', mastery: 0, level: 'beginner'},
+                {word: 'Help me', translation: 'Me ajude', mastery: 0, level: 'beginner'},
+                {word: 'I don\'t know', translation: 'Não sei', mastery: 0, level: 'beginner'},
+                {word: 'Welcome', translation: 'Bem-vindo', mastery: 0, level: 'beginner'},
+                {word: 'Congratulations', translation: 'Parabéns', mastery: 0, level: 'beginner'},
+                {word: 'Good luck', translation: 'Boa sorte', mastery: 0, level: 'beginner'},
+
+                // BEGINNER - Basic Questions (20 words)
+                {word: 'How are you?', translation: 'Como você está?', mastery: 0, level: 'beginner'},
+                {word: 'I am well', translation: 'Estou bem', mastery: 0, level: 'beginner'},
+                {word: 'And you?', translation: 'E você?', mastery: 0, level: 'beginner'},
+                {word: 'What is your name?', translation: 'Qual é o seu nome?', mastery: 0, level: 'beginner'},
+                {word: 'My name is...', translation: 'Meu nome é...', mastery: 0, level: 'beginner'},
+                {word: 'Nice to meet you', translation: 'Prazer em conhecê-lo', mastery: 0, level: 'beginner'},
+                {word: 'Where are you from?', translation: 'De onde você é?', mastery: 0, level: 'beginner'},
+                {word: 'I am from...', translation: 'Eu sou de...', mastery: 0, level: 'beginner'},
+                {word: 'How much?', translation: 'Quanto custa?', mastery: 0, level: 'beginner'},
+                {word: 'Where is...?', translation: 'Onde fica...?', mastery: 0, level: 'beginner'},
+                {word: 'What time is it?', translation: 'Que horas são?', mastery: 0, level: 'beginner'},
+                {word: 'What?', translation: 'O quê?', mastery: 0, level: 'beginner'},
+                {word: 'Who?', translation: 'Quem?', mastery: 0, level: 'beginner'},
+                {word: 'When?', translation: 'Quando?', mastery: 0, level: 'beginner'},
+                {word: 'Where?', translation: 'Onde?', mastery: 0, level: 'beginner'},
+                {word: 'Why?', translation: 'Por quê?', mastery: 0, level: 'beginner'},
+                {word: 'How?', translation: 'Como?', mastery: 0, level: 'beginner'},
+                {word: 'Which?', translation: 'Qual?', mastery: 0, level: 'beginner'},
+                {word: 'How many?', translation: 'Quantos?', mastery: 0, level: 'beginner'},
+                {word: 'Do you speak English?', translation: 'Você fala inglês?', mastery: 0, level: 'beginner'},
+
+                // BEGINNER - Common Verbs & Phrases (30 words)
+                {word: 'I understand', translation: 'Eu entendo', mastery: 0, level: 'beginner'},
+                {word: 'I don\'t understand', translation: 'Eu não entendo', mastery: 0, level: 'beginner'},
+                {word: 'I want', translation: 'Eu quero', mastery: 0, level: 'beginner'},
+                {word: 'I need', translation: 'Eu preciso', mastery: 0, level: 'beginner'},
+                {word: 'I like', translation: 'Eu gosto', mastery: 0, level: 'beginner'},
+                {word: 'I love', translation: 'Eu amo', mastery: 0, level: 'beginner'},
+                {word: 'I have', translation: 'Eu tenho', mastery: 0, level: 'beginner'},
+                {word: 'I am', translation: 'Eu sou/estou', mastery: 0, level: 'beginner'},
+                {word: 'I can', translation: 'Eu posso', mastery: 0, level: 'beginner'},
+                {word: 'I go', translation: 'Eu vou', mastery: 0, level: 'beginner'},
+                {word: 'I come', translation: 'Eu venho', mastery: 0, level: 'beginner'},
+                {word: 'I see', translation: 'Eu vejo', mastery: 0, level: 'beginner'},
+                {word: 'I eat', translation: 'Eu como', mastery: 0, level: 'beginner'},
+                {word: 'I drink', translation: 'Eu bebo', mastery: 0, level: 'beginner'},
+                {word: 'I speak', translation: 'Eu falo', mastery: 0, level: 'beginner'},
+                {word: 'I live', translation: 'Eu moro', mastery: 0, level: 'beginner'},
+                {word: 'I work', translation: 'Eu trabalho', mastery: 0, level: 'beginner'},
+                {word: 'I study', translation: 'Eu estudo', mastery: 0, level: 'beginner'},
+                {word: 'I think', translation: 'Eu acho/penso', mastery: 0, level: 'beginner'},
+                {word: 'I know', translation: 'Eu sei/conheço', mastery: 0, level: 'beginner'},
+                {word: 'I buy', translation: 'Eu compro', mastery: 0, level: 'beginner'},
+                {word: 'I sell', translation: 'Eu vendo', mastery: 0, level: 'beginner'},
+                {word: 'I open', translation: 'Eu abro', mastery: 0, level: 'beginner'},
+                {word: 'I close', translation: 'Eu fecho', mastery: 0, level: 'beginner'},
+                {word: 'I begin', translation: 'Eu começo', mastery: 0, level: 'beginner'},
+                {word: 'I finish', translation: 'Eu termino', mastery: 0, level: 'beginner'},
+                {word: 'I wait', translation: 'Eu espero', mastery: 0, level: 'beginner'},
+                {word: 'I ask', translation: 'Eu pergunto', mastery: 0, level: 'beginner'},
+                {word: 'I answer', translation: 'Eu respondo', mastery: 0, level: 'beginner'},
+                {word: 'I learn', translation: 'Eu aprendo', mastery: 0, level: 'beginner'},
+
+                // INTERMEDIATE - Food & Drink (25 words)
+                {word: 'Water', translation: 'Água', mastery: 0, level: 'intermediate'},
+                {word: 'Food', translation: 'Comida', mastery: 0, level: 'intermediate'},
+                {word: 'Coffee', translation: 'Café', mastery: 0, level: 'intermediate'},
+                {word: 'Tea', translation: 'Chá', mastery: 0, level: 'intermediate'},
+                {word: 'Milk', translation: 'Leite', mastery: 0, level: 'intermediate'},
+                {word: 'Juice', translation: 'Suco', mastery: 0, level: 'intermediate'},
+                {word: 'Beer', translation: 'Cerveja', mastery: 0, level: 'intermediate'},
+                {word: 'Wine', translation: 'Vinho', mastery: 0, level: 'intermediate'},
+                {word: 'Bread', translation: 'Pão', mastery: 0, level: 'intermediate'},
+                {word: 'Butter', translation: 'Manteiga', mastery: 0, level: 'intermediate'},
+                {word: 'Cheese', translation: 'Queijo', mastery: 0, level: 'intermediate'},
+                {word: 'Meat', translation: 'Carne', mastery: 0, level: 'intermediate'},
+                {word: 'Chicken', translation: 'Frango', mastery: 0, level: 'intermediate'},
+                {word: 'Fish', translation: 'Peixe', mastery: 0, level: 'intermediate'},
+                {word: 'Rice', translation: 'Arroz', mastery: 0, level: 'intermediate'},
+                {word: 'Beans', translation: 'Feijão', mastery: 0, level: 'intermediate'},
+                {word: 'Vegetables', translation: 'Legumes', mastery: 0, level: 'intermediate'},
+                {word: 'Fruit', translation: 'Fruta', mastery: 0, level: 'intermediate'},
+                {word: 'Apple', translation: 'Maçã', mastery: 0, level: 'intermediate'},
+                {word: 'Banana', translation: 'Banana', mastery: 0, level: 'intermediate'},
+                {word: 'Orange', translation: 'Laranja', mastery: 0, level: 'intermediate'},
+                {word: 'Egg', translation: 'Ovo', mastery: 0, level: 'intermediate'},
+                {word: 'Sugar', translation: 'Açúcar', mastery: 0, level: 'intermediate'},
+                {word: 'Salt', translation: 'Sal', mastery: 0, level: 'intermediate'},
+                {word: 'Restaurant', translation: 'Restaurante', mastery: 0, level: 'intermediate'},
+
+                // INTERMEDIATE - People & Family (20 words)
+                {word: 'Person', translation: 'Pessoa', mastery: 0, level: 'intermediate'},
+                {word: 'People', translation: 'Pessoas', mastery: 0, level: 'intermediate'},
+                {word: 'Man', translation: 'Homem', mastery: 0, level: 'intermediate'},
+                {word: 'Woman', translation: 'Mulher', mastery: 0, level: 'intermediate'},
+                {word: 'Boy', translation: 'Menino', mastery: 0, level: 'intermediate'},
+                {word: 'Girl', translation: 'Menina', mastery: 0, level: 'intermediate'},
+                {word: 'Child', translation: 'Criança', mastery: 0, level: 'intermediate'},
+                {word: 'Baby', translation: 'Bebê', mastery: 0, level: 'intermediate'},
+                {word: 'Friend', translation: 'Amigo/Amiga', mastery: 0, level: 'intermediate'},
+                {word: 'Family', translation: 'Família', mastery: 0, level: 'intermediate'},
+                {word: 'Father', translation: 'Pai', mastery: 0, level: 'intermediate'},
+                {word: 'Mother', translation: 'Mãe', mastery: 0, level: 'intermediate'},
+                {word: 'Son', translation: 'Filho', mastery: 0, level: 'intermediate'},
+                {word: 'Daughter', translation: 'Filha', mastery: 0, level: 'intermediate'},
+                {word: 'Brother', translation: 'Irmão', mastery: 0, level: 'intermediate'},
+                {word: 'Sister', translation: 'Irmã', mastery: 0, level: 'intermediate'},
+                {word: 'Husband', translation: 'Marido', mastery: 0, level: 'intermediate'},
+                {word: 'Wife', translation: 'Esposa', mastery: 0, level: 'intermediate'},
+                {word: 'Boyfriend', translation: 'Namorado', mastery: 0, level: 'intermediate'},
+                {word: 'Girlfriend', translation: 'Namorada', mastery: 0, level: 'intermediate'},
+
+                // INTERMEDIATE - Places & Objects (30 words)
+                {word: 'House', translation: 'Casa', mastery: 0, level: 'intermediate'},
+                {word: 'Home', translation: 'Lar', mastery: 0, level: 'intermediate'},
+                {word: 'Apartment', translation: 'Apartamento', mastery: 0, level: 'intermediate'},
+                {word: 'Room', translation: 'Quarto', mastery: 0, level: 'intermediate'},
+                {word: 'Bathroom', translation: 'Banheiro', mastery: 0, level: 'intermediate'},
+                {word: 'Kitchen', translation: 'Cozinha', mastery: 0, level: 'intermediate'},
+                {word: 'Door', translation: 'Porta', mastery: 0, level: 'intermediate'},
+                {word: 'Window', translation: 'Janela', mastery: 0, level: 'intermediate'},
+                {word: 'Table', translation: 'Mesa', mastery: 0, level: 'intermediate'},
+                {word: 'Chair', translation: 'Cadeira', mastery: 0, level: 'intermediate'},
+                {word: 'Bed', translation: 'Cama', mastery: 0, level: 'intermediate'},
+                {word: 'Car', translation: 'Carro', mastery: 0, level: 'intermediate'},
+                {word: 'Bus', translation: 'Ônibus', mastery: 0, level: 'intermediate'},
+                {word: 'Train', translation: 'Trem', mastery: 0, level: 'intermediate'},
+                {word: 'Airplane', translation: 'Avião', mastery: 0, level: 'intermediate'},
+                {word: 'Bicycle', translation: 'Bicicleta', mastery: 0, level: 'intermediate'},
+                {word: 'Street', translation: 'Rua', mastery: 0, level: 'intermediate'},
+                {word: 'City', translation: 'Cidade', mastery: 0, level: 'intermediate'},
+                {word: 'Country', translation: 'País', mastery: 0, level: 'intermediate'},
+                {word: 'Store', translation: 'Loja', mastery: 0, level: 'intermediate'},
+                {word: 'Market', translation: 'Mercado', mastery: 0, level: 'intermediate'},
+                {word: 'School', translation: 'Escola', mastery: 0, level: 'intermediate'},
+                {word: 'Hospital', translation: 'Hospital', mastery: 0, level: 'intermediate'},
+                {word: 'Bank', translation: 'Banco', mastery: 0, level: 'intermediate'},
+                {word: 'Hotel', translation: 'Hotel', mastery: 0, level: 'intermediate'},
+                {word: 'Book', translation: 'Livro', mastery: 0, level: 'intermediate'},
+                {word: 'Phone', translation: 'Telefone', mastery: 0, level: 'intermediate'},
+                {word: 'Computer', translation: 'Computador', mastery: 0, level: 'intermediate'},
+                {word: 'Money', translation: 'Dinheiro', mastery: 0, level: 'intermediate'},
+                {word: 'Ticket', translation: 'Bilhete', mastery: 0, level: 'intermediate'},
+
+                // INTERMEDIATE - Adjectives (25 words)
+                {word: 'Good', translation: 'Bom/Boa', mastery: 0, level: 'intermediate'},
+                {word: 'Bad', translation: 'Mau/Má', mastery: 0, level: 'intermediate'},
+                {word: 'Beautiful', translation: 'Bonito/Bonita', mastery: 0, level: 'intermediate'},
+                {word: 'Ugly', translation: 'Feio/Feia', mastery: 0, level: 'intermediate'},
+                {word: 'Big', translation: 'Grande', mastery: 0, level: 'intermediate'},
+                {word: 'Small', translation: 'Pequeno/Pequena', mastery: 0, level: 'intermediate'},
+                {word: 'Tall', translation: 'Alto/Alta', mastery: 0, level: 'intermediate'},
+                {word: 'Short', translation: 'Baixo/Baixa', mastery: 0, level: 'intermediate'},
+                {word: 'Long', translation: 'Longo/Longa', mastery: 0, level: 'intermediate'},
+                {word: 'Hot', translation: 'Quente', mastery: 0, level: 'intermediate'},
+                {word: 'Cold', translation: 'Frio/Fria', mastery: 0, level: 'intermediate'},
+                {word: 'Warm', translation: 'Morno', mastery: 0, level: 'intermediate'},
+                {word: 'Fast', translation: 'Rápido', mastery: 0, level: 'intermediate'},
+                {word: 'Slow', translation: 'Devagar', mastery: 0, level: 'intermediate'},
+                {word: 'Easy', translation: 'Fácil', mastery: 0, level: 'intermediate'},
+                {word: 'Difficult', translation: 'Difícil', mastery: 0, level: 'intermediate'},
+                {word: 'New', translation: 'Novo/Nova', mastery: 0, level: 'intermediate'},
+                {word: 'Old', translation: 'Velho/Velha', mastery: 0, level: 'intermediate'},
+                {word: 'Young', translation: 'Jovem', mastery: 0, level: 'intermediate'},
+                {word: 'Happy', translation: 'Feliz', mastery: 0, level: 'intermediate'},
+                {word: 'Sad', translation: 'Triste', mastery: 0, level: 'intermediate'},
+                {word: 'Tired', translation: 'Cansado/Cansada', mastery: 0, level: 'intermediate'},
+                {word: 'Hungry', translation: 'Com fome', mastery: 0, level: 'intermediate'},
+                {word: 'Thirsty', translation: 'Com sede', mastery: 0, level: 'intermediate'},
+                {word: 'Expensive', translation: 'Caro/Cara', mastery: 0, level: 'intermediate'},
+
+                // ADVANCED - Time & Numbers (20 words)
+                {word: 'Time', translation: 'Tempo', mastery: 0, level: 'advanced'},
+                {word: 'Hour', translation: 'Hora', mastery: 0, level: 'advanced'},
+                {word: 'Day', translation: 'Dia', mastery: 0, level: 'advanced'},
+                {word: 'Week', translation: 'Semana', mastery: 0, level: 'advanced'},
+                {word: 'Month', translation: 'Mês', mastery: 0, level: 'advanced'},
+                {word: 'Year', translation: 'Ano', mastery: 0, level: 'advanced'},
+                {word: 'Today', translation: 'Hoje', mastery: 0, level: 'advanced'},
+                {word: 'Tomorrow', translation: 'Amanhã', mastery: 0, level: 'advanced'},
+                {word: 'Yesterday', translation: 'Ontem', mastery: 0, level: 'advanced'},
+                {word: 'Now', translation: 'Agora', mastery: 0, level: 'advanced'},
+                {word: 'Later', translation: 'Mais tarde', mastery: 0, level: 'advanced'},
+                {word: 'Before', translation: 'Antes', mastery: 0, level: 'advanced'},
+                {word: 'After', translation: 'Depois', mastery: 0, level: 'advanced'},
+                {word: 'Always', translation: 'Sempre', mastery: 0, level: 'advanced'},
+                {word: 'Never', translation: 'Nunca', mastery: 0, level: 'advanced'},
+                {word: 'Sometimes', translation: 'Às vezes', mastery: 0, level: 'advanced'},
+                {word: 'Morning', translation: 'Manhã', mastery: 0, level: 'advanced'},
+                {word: 'Afternoon', translation: 'Tarde', mastery: 0, level: 'advanced'},
+                {word: 'Evening', translation: 'Noite', mastery: 0, level: 'advanced'},
+                {word: 'Night', translation: 'Noite', mastery: 0, level: 'advanced'},
+
+                // ADVANCED - Abstract & Complex (20 words)
+                {word: 'Love', translation: 'Amor', mastery: 0, level: 'advanced'},
+                {word: 'Work', translation: 'Trabalho', mastery: 0, level: 'advanced'},
+                {word: 'Life', translation: 'Vida', mastery: 0, level: 'advanced'},
+                {word: 'Death', translation: 'Morte', mastery: 0, level: 'advanced'},
+                {word: 'Health', translation: 'Saúde', mastery: 0, level: 'advanced'},
+                {word: 'Peace', translation: 'Paz', mastery: 0, level: 'advanced'},
+                {word: 'War', translation: 'Guerra', mastery: 0, level: 'advanced'},
+                {word: 'Truth', translation: 'Verdade', mastery: 0, level: 'advanced'},
+                {word: 'Lie', translation: 'Mentira', mastery: 0, level: 'advanced'},
+                {word: 'Hope', translation: 'Esperança', mastery: 0, level: 'advanced'},
+                {word: 'Dream', translation: 'Sonho', mastery: 0, level: 'advanced'},
+                {word: 'Fear', translation: 'Medo', mastery: 0, level: 'advanced'},
+                {word: 'Joy', translation: 'Alegria', mastery: 0, level: 'advanced'},
+                {word: 'Pain', translation: 'Dor', mastery: 0, level: 'advanced'},
+                {word: 'Problem', translation: 'Problema', mastery: 0, level: 'advanced'},
+                {word: 'Solution', translation: 'Solução', mastery: 0, level: 'advanced'},
+                {word: 'Opportunity', translation: 'Oportunidade', mastery: 0, level: 'advanced'},
+                {word: 'Challenge', translation: 'Desafio', mastery: 0, level: 'advanced'},
+                {word: 'Success', translation: 'Sucesso', mastery: 0, level: 'advanced'},
+                {word: 'Failure', translation: 'Fracasso', mastery: 0, level: 'advanced'},
+
+                // ADVANCED - Useful Phrases (15 words)
+                {word: 'I\'m sorry to hear that', translation: 'Sinto muito ouvir isso', mastery: 0, level: 'advanced'},
+                {word: 'That\'s interesting', translation: 'Isso é interessante', mastery: 0, level: 'advanced'},
+                {word: 'I agree', translation: 'Eu concordo', mastery: 0, level: 'advanced'},
+                {word: 'I disagree', translation: 'Eu discordo', mastery: 0, level: 'advanced'},
+                {word: 'It doesn\'t matter', translation: 'Não importa', mastery: 0, level: 'advanced'},
+                {word: 'It\'s possible', translation: 'É possível', mastery: 0, level: 'advanced'},
+                {word: 'It\'s impossible', translation: 'É impossível', mastery: 0, level: 'advanced'},
+                {word: 'I hope so', translation: 'Espero que sim', mastery: 0, level: 'advanced'},
+                {word: 'I think so', translation: 'Acho que sim', mastery: 0, level: 'advanced'},
+                {word: 'Of course not', translation: 'Claro que não', mastery: 0, level: 'advanced'},
+                {word: 'Let\'s go', translation: 'Vamos', mastery: 0, level: 'advanced'},
+                {word: 'Hurry up', translation: 'Se apresse', mastery: 0, level: 'advanced'},
+                {word: 'Be careful', translation: 'Tome cuidado', mastery: 0, level: 'advanced'},
+                {word: 'Don\'t worry', translation: 'Não se preocupe', mastery: 0, level: 'advanced'},
+                {word: 'Have a good day', translation: 'Tenha um bom dia', mastery: 0, level: 'advanced'}
             ],
             japanese: [
                 {word: 'Hello', translation: 'こんにちは (Konnichiwa)', mastery: 0},
@@ -869,7 +1098,20 @@
             allAnswers.forEach(answer => {
                 const option = document.createElement('div');
                 option.className = 'quiz-option';
-                option.textContent = answer.translation;
+                
+                const text = document.createElement('span');
+                text.textContent = answer.translation;
+                option.appendChild(text);
+                
+                const speakBtn = document.createElement('button');
+                speakBtn.className = 'mini-speak-btn';
+                speakBtn.textContent = '🔊';
+                speakBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    speakText(answer.translation);
+                };
+                option.appendChild(speakBtn);
+                
                 option.dataset.answer = answer.translation;
                 option.dataset.correct = answer === correctAnswer;
                 option.onclick = () => selectAnswer(option);
@@ -953,8 +1195,11 @@
                         <div class="vocab-word">${item.word}</div>
                         <div class="vocab-translation">${item.translation}</div>
                     </div>
-                    <div class="vocab-mastery">
-                        ${[1,2,3,4,5].map(i => `<div class="mastery-dot ${i <= item.mastery ? 'filled' : ''}"></div>`).join('')}
+                    <div class="vocab-right">
+                        <button class="mini-speak-btn" onclick="speakText('${item.translation.replace(/'/g, "\\'")}')">🔊</button>
+                        <div class="vocab-mastery">
+                            ${[1,2,3,4,5].map(i => `<div class="mastery-dot ${i <= item.mastery ? 'filled' : ''}"></div>`).join('')}
+                        </div>
                     </div>
                 `;
                 
@@ -1019,19 +1264,16 @@
         generateQuiz();
 
         // Text-to-speech functionality
-        function speakWord() {
+        function speakText(text) {
             if ('speechSynthesis' in window) {
                 // Cancel any ongoing speech
                 window.speechSynthesis.cancel();
                 
-                // Get the current word to speak (Portuguese translation)
-                const wordToSpeak = currentVocab[currentCardIndex].translation;
-                
                 // Create utterance
-                const utterance = new SpeechSynthesisUtterance(wordToSpeak);
+                const utterance = new SpeechSynthesisUtterance(text);
                 
                 // Set language to Portuguese
-                utterance.lang = 'pt-BR'; // Brazilian Portuguese (you can use 'pt-PT' for European Portuguese)
+                utterance.lang = 'pt-BR'; // Brazilian Portuguese
                 utterance.rate = 0.8; // Slightly slower for learning
                 utterance.pitch = 1;
                 utterance.volume = 1;
@@ -1051,6 +1293,12 @@
             } else {
                 alert('Sorry, your browser does not support text-to-speech.');
             }
+        }
+
+        function speakWord() {
+            // Get the current word to speak (Portuguese translation)
+            const wordToSpeak = currentVocab[currentCardIndex].translation;
+            speakText(wordToSpeak);
         }
 
         // Load voices (some browsers need this)
