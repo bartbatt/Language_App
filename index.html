@@ -448,6 +448,15 @@
         .download-btn:active {
             transform: translateY(0);
         }
+
+        #voice-status {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
     </style>
 </head>
 <body>
@@ -478,6 +487,13 @@
 
         <div class="content">
             <div id="flashcards" class="section active">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <button class="btn btn-primary" id="voice-toggle-btn" onclick="toggleVoiceControl()">🎤 Enable Voice Control</button>
+                    <div id="voice-status" style="display: none; margin-top: 10px; color: #667eea; font-weight: 600;">🎤 Listening...</div>
+                    <div style="margin-top: 10px; font-size: 0.9em; color: #6c757d;">
+                        <strong>Voice Commands:</strong> "next" • "flip" • "repeat" • "I know this" • "difficult"
+                    </div>
+                </div>
                 <div class="flashcard" id="flashcard" onclick="flipCard()">
                     <div class="flashcard-word" id="card-front">Hello</div>
                     <div class="flashcard-translation" id="card-back" style="display: none;">Hola</div>
@@ -1657,6 +1673,11 @@
             const progressBar = document.getElementById('flashcard-progress');
             progressBar.style.width = progress + '%';
             progressBar.textContent = `${currentCardIndex + 1}/${currentVocab.length}`;
+            
+            // Auto-play when voice control is active (for hands-free driving mode)
+            if (isListening) {
+                setTimeout(() => speakWord(), 500); // Small delay for better UX
+            }
         }
 
         function nextCard() {
@@ -1915,9 +1936,9 @@
                 
                 // Set language to Portuguese
                 utterance.lang = 'pt-BR'; // Brazilian Portuguese
-                utterance.rate = 0.8; // Slightly slower for learning
+                utterance.rate = 0.7; // Slower for easier comprehension while driving
                 utterance.pitch = 1;
-                utterance.volume = 1;
+                utterance.volume = 1.0; // Maximum volume
                 
                 // Try to find a Portuguese voice
                 const voices = window.speechSynthesis.getVoices();
@@ -1973,6 +1994,90 @@
             
             // Show confirmation
             alert('📥 Downloaded! Open the file anytime to use offline.\n\nTip: The "Say it" button will still work offline using your device\'s built-in voice.');
+        }
+
+        // Voice Recognition for hands-free control
+        let recognition;
+        let isListening = false;
+
+        function startVoiceControl() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert('Voice recognition is not supported in your browser. Please use Chrome, Edge, or Safari.');
+                return;
+            }
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            
+            recognition.continuous = true;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onstart = () => {
+                isListening = true;
+                document.getElementById('voice-status').textContent = '🎤 Listening...';
+                document.getElementById('voice-status').style.display = 'block';
+            };
+
+            recognition.onend = () => {
+                if (isListening) {
+                    // Automatically restart if still enabled
+                    recognition.start();
+                }
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
+                console.log('Heard:', transcript);
+                
+                // Voice commands
+                if (transcript.includes('next') || transcript.includes('skip')) {
+                    nextCard();
+                    speakWord(); // Automatically say the new word
+                } else if (transcript.includes('flip') || transcript.includes('show') || transcript.includes('translate')) {
+                    flipCard();
+                } else if (transcript.includes('repeat') || transcript.includes('say it') || transcript.includes('again')) {
+                    speakWord();
+                } else if (transcript.includes('i know') || transcript.includes('know this') || transcript.includes('correct')) {
+                    markKnown();
+                    speakWord(); // Say the next word
+                } else if (transcript.includes('difficult') || transcript.includes('hard') || transcript.includes('don\'t know')) {
+                    markDifficult();
+                    speakWord(); // Say the next word
+                }
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                if (event.error === 'no-speech') {
+                    // Ignore no-speech errors, just keep listening
+                    return;
+                }
+            };
+
+            recognition.start();
+        }
+
+        function stopVoiceControl() {
+            if (recognition) {
+                isListening = false;
+                recognition.stop();
+                document.getElementById('voice-status').style.display = 'none';
+            }
+        }
+
+        function toggleVoiceControl() {
+            if (isListening) {
+                stopVoiceControl();
+                document.getElementById('voice-toggle-btn').textContent = '🎤 Enable Voice Control';
+                document.getElementById('voice-toggle-btn').classList.remove('btn-warning');
+                document.getElementById('voice-toggle-btn').classList.add('btn-primary');
+            } else {
+                startVoiceControl();
+                document.getElementById('voice-toggle-btn').textContent = '🔇 Disable Voice Control';
+                document.getElementById('voice-toggle-btn').classList.remove('btn-primary');
+                document.getElementById('voice-toggle-btn').classList.add('btn-warning');
+            }
         }
     </script>
 </body>
