@@ -1,0 +1,25 @@
+{
+  "name": "Bart's Language App",
+  "short_name": "Language App",
+  "description": "Learn Portuguese, Spanish, French, and Italian with flashcards, quizzes, and voice control",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#667eea",
+  "theme_color": "#667eea",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./app-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./favicon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["education", "language"],
+  "screenshots": []
+}

@@ -5,9 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bart's Language App - Learn Portuguese Online</title>
     
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="app-logo.png">
+    
+    <!-- iOS specific meta tags for PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Language App">
+    
+    <!-- Theme color for browser UI -->
+    <meta name="theme-color" content="#667eea">
     
     <!-- Open Graph / Social Media Preview -->
     <meta property="og:title" content="Bart's Language App">
@@ -489,9 +500,19 @@
             <div id="flashcards" class="section active">
                 <div style="text-align: center; margin-bottom: 20px;">
                     <button class="btn btn-primary" id="voice-toggle-btn" onclick="toggleVoiceControl()">🎤 Enable Voice Control</button>
-                    <div id="voice-status" style="display: none; margin-top: 10px; color: #667eea; font-weight: 600;">🎤 Listening...</div>
-                    <div style="margin-top: 10px; font-size: 0.9em; color: #6c757d;">
-                        <strong>Voice Commands:</strong> "next" • "flip" • "repeat" • "I know this" • "difficult"
+                    <div id="voice-status" style="display: none; margin-top: 10px; color: #667eea; font-weight: 600; font-size: 1.1em;">🎤 Listening...</div>
+                    <div style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 10px; font-size: 0.95em;">
+                        <strong style="color: #667eea;">🎤 Voice Commands (speak clearly):</strong><br>
+                        <div style="margin-top: 8px; line-height: 1.8;">
+                            <strong>"Next"</strong> - Next card • 
+                            <strong>"Flip"</strong> - Show translation • 
+                            <strong>"Repeat"</strong> - Hear again<br>
+                            <strong>"I know"</strong> - Mark as learned • 
+                            <strong>"Difficult"</strong> - Mark as hard
+                        </div>
+                        <div style="margin-top: 10px; font-size: 0.85em; color: #6c757d;">
+                            💡 Tip: Make sure to allow microphone permission when prompted
+                        </div>
                     </div>
                 </div>
                 <div class="flashcard" id="flashcard" onclick="flipCard()">
@@ -2012,50 +2033,107 @@
             recognition.continuous = true;
             recognition.interimResults = false;
             recognition.lang = 'en-US';
+            recognition.maxAlternatives = 1;
 
             recognition.onstart = () => {
                 isListening = true;
-                document.getElementById('voice-status').textContent = '🎤 Listening...';
+                document.getElementById('voice-status').textContent = '🎤 Listening... (Say "next", "flip", or "repeat")';
                 document.getElementById('voice-status').style.display = 'block';
+                console.log('Voice recognition started');
             };
 
             recognition.onend = () => {
+                console.log('Voice recognition ended');
                 if (isListening) {
                     // Automatically restart if still enabled
-                    recognition.start();
+                    try {
+                        recognition.start();
+                    } catch (e) {
+                        console.log('Restart attempted too soon, will retry...');
+                        setTimeout(() => {
+                            if (isListening) recognition.start();
+                        }, 100);
+                    }
                 }
             };
 
             recognition.onresult = (event) => {
-                const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
-                console.log('Heard:', transcript);
+                const last = event.results.length - 1;
+                const transcript = event.results[last][0].transcript.toLowerCase().trim();
+                const confidence = event.results[last][0].confidence;
                 
-                // Voice commands
-                if (transcript.includes('next') || transcript.includes('skip')) {
+                console.log('Heard: "' + transcript + '" (confidence: ' + confidence + ')');
+                
+                // Show what was heard
+                document.getElementById('voice-status').textContent = '🎤 Heard: "' + transcript + '"';
+                
+                let commandExecuted = false;
+                
+                // Voice commands - more flexible matching
+                if (transcript.includes('next') || transcript.includes('skip') || transcript.includes('neck')) {
+                    console.log('Command: NEXT');
                     nextCard();
-                    speakWord(); // Automatically say the new word
-                } else if (transcript.includes('flip') || transcript.includes('show') || transcript.includes('translate')) {
+                    commandExecuted = true;
+                } else if (transcript.includes('flip') || transcript.includes('show') || transcript.includes('translate') || transcript.includes('answer')) {
+                    console.log('Command: FLIP');
                     flipCard();
-                } else if (transcript.includes('repeat') || transcript.includes('say it') || transcript.includes('again')) {
+                    commandExecuted = true;
+                } else if (transcript.includes('repeat') || transcript.includes('say') || transcript.includes('again') || transcript.includes('play')) {
+                    console.log('Command: REPEAT');
                     speakWord();
-                } else if (transcript.includes('i know') || transcript.includes('know this') || transcript.includes('correct')) {
+                    commandExecuted = true;
+                } else if (transcript.includes('know') || transcript.includes('correct') || transcript.includes('good') || transcript.includes('yes')) {
+                    console.log('Command: KNOW THIS');
                     markKnown();
-                    speakWord(); // Say the next word
-                } else if (transcript.includes('difficult') || transcript.includes('hard') || transcript.includes('don\'t know')) {
+                    commandExecuted = true;
+                } else if (transcript.includes('difficult') || transcript.includes('hard') || transcript.includes('don\'t') || transcript.includes('no')) {
+                    console.log('Command: DIFFICULT');
                     markDifficult();
-                    speakWord(); // Say the next word
+                    commandExecuted = true;
+                }
+                
+                if (commandExecuted) {
+                    // Flash green to show command was recognized
+                    document.getElementById('voice-status').style.color = '#28a745';
+                    setTimeout(() => {
+                        document.getElementById('voice-status').style.color = '#667eea';
+                        document.getElementById('voice-status').textContent = '🎤 Listening... (Say "next", "flip", or "repeat")';
+                    }, 1000);
+                } else {
+                    // Flash orange for unrecognized command
+                    console.log('No matching command found');
+                    document.getElementById('voice-status').style.color = '#ff9800';
+                    setTimeout(() => {
+                        document.getElementById('voice-status').style.color = '#667eea';
+                        document.getElementById('voice-status').textContent = '🎤 Listening... (Say "next", "flip", or "repeat")';
+                    }, 1500);
                 }
             };
 
             recognition.onerror = (event) => {
                 console.error('Speech recognition error:', event.error);
+                document.getElementById('voice-status').textContent = '⚠️ Error: ' + event.error;
+                document.getElementById('voice-status').style.color = '#dc3545';
+                
                 if (event.error === 'no-speech') {
-                    // Ignore no-speech errors, just keep listening
+                    // Just keep listening
+                    setTimeout(() => {
+                        document.getElementById('voice-status').style.color = '#667eea';
+                        document.getElementById('voice-status').textContent = '🎤 Listening... (Say "next", "flip", or "repeat")';
+                    }, 2000);
                     return;
+                } else if (event.error === 'not-allowed') {
+                    alert('Microphone permission denied. Please allow microphone access in your browser settings.');
+                    stopVoiceControl();
                 }
             };
 
-            recognition.start();
+            try {
+                recognition.start();
+            } catch (e) {
+                console.error('Error starting recognition:', e);
+                alert('Could not start voice recognition: ' + e.message);
+            }
         }
 
         function stopVoiceControl() {
@@ -2063,6 +2141,7 @@
                 isListening = false;
                 recognition.stop();
                 document.getElementById('voice-status').style.display = 'none';
+                console.log('Voice recognition stopped');
             }
         }
 
@@ -2079,6 +2158,29 @@
                 document.getElementById('voice-toggle-btn').classList.add('btn-warning');
             }
         }
+
+        // Register Service Worker for PWA offline functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker registered successfully:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
+
+        // Prompt user to install PWA on mobile
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent the mini-infobar from appearing on mobile
+            e.preventDefault();
+            // Store the event for later use
+            deferredPrompt = e;
+            console.log('PWA install prompt available');
+        });
     </script>
 </body>
 </html>
